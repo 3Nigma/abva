@@ -1,0 +1,17 @@
+{
+  "name": "a-better-voice-api",
+  "version": "1.0.0",
+  "description": "Improved Voice API proposal",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "author": "Victor ADASCALITEI [3Nigma@GitHub]",
+  "license": "gpl-3.0",
+  "dependencies": {
+    "actions-on-google": "^2.12.0",
+    "express": "^4.17.1",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
+  }
+}
