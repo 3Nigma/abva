@@ -5,12 +5,12 @@ Proof of concept code that helps you write chat-bot controlling logic in a more 
 
 [Here's a flavour](https://github.com/3Nigma/abva/blob/master/intents/welcome.js#L15) of how you can cascade 2 yes/no questions:
 ``` js
-if (await conv.ask("In order to continue, please say 'yes' if you are a human or 'no' otherwise.")) {
-  conv.say("Perfect! That's all I wanted to hear.");
-} else if (await conv.ask("Are you positive? I'm not going to ask a third time.")) {
-  conv.say("Alright then. I'm sorry, but I'm only currently programmed to assist human beings.");
+if (await reply.askingForConfirmationTo("In order to continue, please say 'yes' if you are a human or 'no' otherwise.")) {
+  reply.endingWith("Perfect! That's all I wanted to hear.");
+} else if (await reply.askingForConfirmationTo("Are you positive? I'm not going to ask a third time.")) {
+  reply.endingWith("Alright then. I'm sorry, but I'm only currently programmed to assist human beings.");
 } else {
-  conv.say("Ok. That's what I also thought.");
+  reply.endingWith("Ok. That's what I also thought.");
 }
 ```
 
