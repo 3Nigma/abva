@@ -60,5 +60,5 @@ if (userLocation !== undefined) {
 }
 ```
 To run them you would need to follow the same above-mentioned steps with the addition that you
-# have to [import this, more complete, agent description](https://www.dropbox.com/s/a1i9y3zayst9cxu/mcchatty-v3.zip?dl=0) into DialogFlow
-# execute `npm run ask-location:example` or `npm run guess-number:example` depending on what you want to see
+1. have to [import this, more complete, agent description](https://www.dropbox.com/s/a1i9y3zayst9cxu/mcchatty-v3.zip?dl=0) into DialogFlow
+2. execute `npm run ask-location:example` or `npm run guess-number:example` depending on what you want to see
