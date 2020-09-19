@@ -1,32 +1,46 @@
 const express = require('express');
+const yargs = require('yargs');
 
 const { DialogFlowBackend } = require('./google/dialogflow');
-const { WelcomeIntent } = require('./intents/welcome');
+
+// Load the utility intents
+const { NumberIntent } = require('./intents/utility/number');
+const { LocationIntent } = require('./intents/utility/location');
 const { FallbackIntent } = require('./intents/fallback');
 const { ConfirmationIntent } = require('./intents/utility/confirmation');
 
-console.log('Locking onto the environment ...');
-if (process.env.SERVICE_PORT === undefined) {
-    process.env.SERVICE_PORT = 3000;
-    console.warn(` * No SERVICE_PORT provided. Defaulting to ${process.env.SERVICE_PORT}`);
-} else {
-    console.log(` * SERVICE_PORT set and using '${process.env.SERVICE_PORT}'.`);
-}
-console.log('Done checking the environment.');
+const argv = yargs
+    .option('port', {
+        alias: 'p',
+        type: 'number',
+        description: 'Port to bind the fulfiller to',
+        default: 3000
+    })
+    .option('flow', {
+        alias: 'f',
+        type: 'string',
+        description: 'The root-flow to load',
+        choices: ['human-or-robot', 'guess-number', 'ask-location'],
+        demandOption: true
+    })
+    .argv;
 
 const eApp = express().use(express.json());
 const dialogFlowBackend = new DialogFlowBackend({});
+const rootFlowToLoad = Object.values(require(`./flows/${argv.flow}`))[0];
 
 dialogFlowBackend.register(
-    // Business logic intents
-    FallbackIntent,
-    WelcomeIntent,
+    // Business logic flows
+    rootFlowToLoad,
     
     // Utility Intents
-    ConfirmationIntent
+    ConfirmationIntent,
+    LocationIntent,
+    NumberIntent,
+    FallbackIntent
 );
 
 dialogFlowBackend.mountTo(eApp, '/');
-eApp.listen(process.env.SERVICE_PORT, () => {
-    console.log(`Server starting listening to voice requests on port ${process.env.SERVICE_PORT}`);
+eApp.listen(argv.port, () => {
+    console.log(`Server starting listening to voice requests on port ${argv.port}`);
 });

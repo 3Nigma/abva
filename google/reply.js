@@ -1,4 +1,4 @@
-const { Confirmation } = require('actions-on-google');
+const { Confirmation, Permission } = require('actions-on-google');
 
 const { BaseReply } = require('../core/reply');
 const { VoicePendings } = require('../core/context');
@@ -64,6 +64,35 @@ class DialogFlowConfirmationPendingResponse extends PendingQuestionResponse {
     }
 }
 
+class DialogFlowNumberSelectionPendingResponse extends PendingQuestionResponse {
+    constructor(replier, textQuestion) {
+        super(replier, textQuestion);
+
+        replier.askFor(textQuestion);
+        replier.send();
+    }
+
+    get definition() {
+        return VoicePendings.NumberSelection;
+    }
+}
+
+class DialogFlowLocationPendingResponse extends PendingQuestionResponse {
+    constructor(replier, { context }) {
+        super(replier);
+
+        replier.askFor(new Permission({
+            context,
+            permissions: 'DEVICE_PRECISE_LOCATION',
+        }));
+        replier.send();
+    }
+
+    get definition() {
+        return VoicePendings.Location;
+    }
+}
+
 class DialogFlowReply extends BaseReply {
     constructor(backend, vContext) {
         super(backend);
@@ -95,6 +124,32 @@ class DialogFlowReply extends BaseReply {
         return this._context.pendings.confirmation.waitForResponse();
     }
 
+    async askingForNumberedSelectionTo(text) {
+        this._context.pendings.numberSelection = new DialogFlowNumberSelectionPendingResponse(this, text);
+        return this._context.pendings.numberSelection.waitForResponse();
+    }
+
+    async askingForCurrentLocationWith(contextString) {
+        let promiseToReturn;
+
+        // Prepare response handler (first look into cache)
+        if (this._currentConversation.device !== undefined &&
+            this._currentConversation.device.location !== undefined && 
+            this._currentConversation.device.location.coordinates !== undefined) {
+            promiseToReturn = Promise.resolve(this._currentConversation.device.location.coordinates);
+        } else {
+            // Ask for precise location
+            this._context.pendings.location = new DialogFlowLocationPendingResponse(this, {
+                context: contextString
+            });
+            promiseToReturn = this._context.pendings.location.waitForResponse();
+        }
+
+        return promiseToReturn;
+    }
+    async askingForCurrentLocation() {
+        return this.askingForCurrentLocationWith();
+    }
 
     send() {
         this._remotelyResolveIntent();

@@ -1,0 +1,29 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch ask-location example",
+            "program": "${workspaceFolder}/main.js",
+            "args": ["-f", "ask-location"]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch human-or-robot example",
+            "program": "${workspaceFolder}/main.js",
+            "args": ["-f", "human-or-robot"]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch guess-number example",
+            "program": "${workspaceFolder}/main.js",
+            "args": ["-f", "guess-number"]
+        }
+    ]
+}

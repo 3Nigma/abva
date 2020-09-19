@@ -28,7 +28,9 @@ class VoicePendingDefinition {
 }
 
 const VoicePendings = {
-    Confirmation: new VoicePendingDefinition('confirmation')
+    Confirmation: new VoicePendingDefinition('confirmation'),
+    Location: new VoicePendingDefinition('location'),
+    NumberSelection: new VoicePendingDefinition('numberSelection', (arg) => /\d*/g.test(arg))
 };
 
 class VoiceContext {
@@ -44,6 +46,13 @@ class VoiceContext {
 
     get pendings() {
         return this._pendings;
+    }
+
+    getDeviceLocation() {
+        return this._data.deviceLocation;
+    }
+    setDeviceLocationTo(loc) {
+        this._data.deviceLocation = loc;
     }
 }
 

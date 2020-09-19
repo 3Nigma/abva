@@ -60,7 +60,6 @@ class DialogFlowBackend extends VoiceBackend {
                     const request = { params, argument, status };  // TODO: classify this
                     const reply = conv.reply;
                     
-                    // Note: Handoffs don't need to be checked because they close the session when confirmed
                     const pendingUtilityNameToBeResolved = Object.keys(this._utilityIntentHandlers)
                         .find(utilityIntentHandlerName => this._utilityIntentHandlers[utilityIntentHandlerName].targetedPendingDefinitions
                         .find(checkedTargetedPendingDefinition => reply._context.pendings[checkedTargetedPendingDefinition.name] && reply._context.pendings[checkedTargetedPendingDefinition.name].isWaitingToBeResolved) !== undefined);
@@ -68,6 +67,17 @@ class DialogFlowBackend extends VoiceBackend {
                     if (pendingUtilityNameToBeResolved !== undefined) {
                         const utilityIntentHandler = this._utilityIntentHandlers[pendingUtilityNameToBeResolved];
 
+                        if (utilityIntentHandler.voiceTriggerNames.indexOf(conv.intent) === -1) {
+                            // Triggered a different intent
+                            // We notify the pending utility intent handler that no valid input was provided
+                            switch (pendingUtilityNameToBeResolved) {
+                                case NumberIntent.name:
+                                    request.argument = undefined;
+                                    break;
+                                default:
+                                    // TODO: default other arguments according to expected by various utility intents
+                            }
+                        }
                         await utilityIntentHandler.handleFor(this._channel, context, request, reply);
                     } else {
                         // Default to try and handle the intent

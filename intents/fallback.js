@@ -13,7 +13,7 @@ class FallbackIntent extends BaseIntent {
      * @override
      */
     async _handleFor(channel, context, request, reply) {
-        reply.with(`I couldn't undestand what you were saying. Can you please say it again?`);
+        reply.with("I couldn't undestand what you were saying. Can you please say it again?");
     }
 }
 

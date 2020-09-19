@@ -1,14 +1,6 @@
-const { BaseIntent } = require('../core/intent');
+const { RootFlow } = require('./root_flow');
 
-class WelcomeIntent extends BaseIntent {
-    static get name() {
-        return 'Welcome Intent';
-    }
-
-    constructor() {
-        super(WelcomeIntent.name);
-    }
-
+class HumanOrRobotRootFlow extends RootFlow {
     /**
      * @override
      */
@@ -24,5 +16,5 @@ class WelcomeIntent extends BaseIntent {
 }
 
 module.exports = {
-    WelcomeIntent
+    HumanOrRobotRootFlow
 };

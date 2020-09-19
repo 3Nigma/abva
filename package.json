@@ -4,7 +4,9 @@
   "description": "Improved Voice API proposal",
   "main": "main.js",
   "scripts": {
-    "start": "node main.js"
+    "ask-location:example": "nodemon main.js -f ask-location",
+    "guess-number:example": "nodemon main.js -f guess-number",
+    "human-or-robot:example": "nodemon main.js -f human-or-robot"
   },
   "author": "Victor ADASCALITEI [3Nigma@GitHub]",
   "license": "gpl-3.0",
@@ -12,6 +14,10 @@
     "actions-on-google": "^2.12.0",
     "express": "^4.17.1",
     "request": "^2.88.0",
-    "request-promise": "^4.2.4"
+    "request-promise": "^4.2.4",
+    "yargs": "^16.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }
